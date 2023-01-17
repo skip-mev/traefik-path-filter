@@ -1,0 +1,10 @@
+displayName: HTTP path filter
+type: middleware
+iconPath: .assets/icon.png
+
+import: github.com/skip-mev/traefik-path-filter
+summary: 'Block or allow requests based on the HTTP path'
+
+testData:
+  allowlist:
+    - "/test"
