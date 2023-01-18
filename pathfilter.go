@@ -70,11 +70,9 @@ func New(ctx context.Context, next http.Handler, config *Config, name string) (h
 func (pf *PathFilter) ServeHTTP(rw http.ResponseWriter, req *http.Request) {
 	currentPath := req.URL.EscapedPath()
 
-	os.Stdout.WriteString(fmt.Sprintf("bl: %s\n", pf.blocklist))
 	if len(pf.blocklist) > 0 {
 		for _, re := range pf.blocklist {
 			if re.MatchString(currentPath) {
-				os.Stdout.WriteString(fmt.Sprintf("blocking %s for %s", currentPath, re))
 				http.Error(rw, "This path is blocked", http.StatusForbidden)
 				return
 			}
