@@ -68,27 +68,27 @@ func New(ctx context.Context, next http.Handler, config *Config, name string) (h
 }
 
 func (pf *PathFilter) ServeHTTP(rw http.ResponseWriter, req *http.Request) {
-        currentPath := req.URL.EscapedPath()
+	currentPath := req.URL.EscapedPath()
 
-        if len(pf.blocklist) > 0 {
-                for _, re := range pf.blocklist {
-                        if re.MatchString(currentPath) {
-                                http.Error(rw, "This path is blocked", http.StatusForbidden)
-                                return
-                        }
-                }
-        }
+	if len(pf.blocklist) > 0 {
+		for _, re := range pf.blocklist {
+			if re.MatchString(currentPath) {
+				http.Error(rw, "This path is blocked", http.StatusForbidden)
+				return
+			}
+		}
+	}
 
-        if len(pf.allowlist) > 0 {
-                for _, re := range pf.allowlist {
-                        if re.MatchString(currentPath) {
-                                pf.next.ServeHTTP(rw, req)
-                                return
-                        }
-                }
-                http.Error(rw, "This path is blocked", http.StatusForbidden)
-                return
-        }
+	if len(pf.allowlist) > 0 {
+		for _, re := range pf.allowlist {
+			if re.MatchString(currentPath) {
+				pf.next.ServeHTTP(rw, req)
+				return
+			}
+		}
+		http.Error(rw, "This path is blocked", http.StatusForbidden)
+		return
+	}
 
-        pf.next.ServeHTTP(rw, req)
+	pf.next.ServeHTTP(rw, req)
 }
